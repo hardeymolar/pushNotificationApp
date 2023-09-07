@@ -14,7 +14,7 @@ app.get('/info', (req, res) => {
 
     // Define github repo,file url and statuscode
     const githubRepoUrl = 'https://github.com/hardeymolar/dayInfoApp';
-    const githubFileUrl = `${githubRepoUrl}/app.js`;
+    const githubFileUrl = `${githubRepoUrl}/blob/main/app.js`;
     const statusCode = 200;
 
     // Create the response object
