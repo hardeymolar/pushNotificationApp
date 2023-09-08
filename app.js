@@ -1,35 +1,44 @@
 require('dotenv').config();
 const express = require("express");
+const webpush = require("web-push");
+// const bodyparser = require("body-parser");
+const path = require("path");
+
 const app = express();
 
+app.use(express.static(path.join(__dirname,"client")))
+app.use(express.json());
 
-app.get('/info', (req, res) => {
-    const slackName = req.query.slack_name;
-    const track = req.query.track;
+const publicVapidKey = "BHP6m8uPMSyAOvo1tMqkxfOIIzom-hBeT81mwOGqnpQzE-gXNLSA6EY6LXySTv_u1-5bIwDlo8H5jB7WZEMqJFI";
+const privateVapidKey = "mTAzX_IW8sZ7nSjf5oTaNZdeqR4AD-Zx_2LAr6cidpY";
 
-    // Get the current day
-    const currentDay = new Date().toLocaleDateString('en-US', { weekday: 'long' });
-    // Generate UTC time in ISO format
-    const utcTime = new Date().toISOString();
+webpush.setVapidDetails("mailto:abdulmalikgbolahan95@gmail.com",publicVapidKey,privateVapidKey);
 
-    // Define github repo,file url and statuscode
-    const githubRepoUrl = 'https://github.com/hardeymolar/dayInfoApp';
-    const githubFileUrl = `${githubRepoUrl}/blob/main/app.js`;
-    const statusCode = 200;
 
-    // Create the response object
-    const responseObject = {
-        slack_name: slackName,
-        current_day: currentDay,
-        utc_time: utcTime,
-        track: track,
-        github_file_url: githubFileUrl,
-        github_repo_url: githubRepoUrl,
-        status_code: statusCode,
-    };
-    // Send the response as JSON
-    res.json(responseObject);
-});
+// suscribe route
+
+app.post("/subscribe",(req,res)=>{
+    // Get push subscription object
+
+const subscription = req.body;
+
+// send 201 - resource created
+
+res.status(201).json({});
+
+// create payload
+const payload = "here is a payload";
+
+const options ={
+
+}
+
+// pass object into send notification
+
+webpush.sendNotification(subscription,payload).catch(err => console.error(err));
+
+})
+
 PORT = process.env.PORT
 
 app.listen(PORT,()=>console.log(`app is listening on port ${PORT}...`))
